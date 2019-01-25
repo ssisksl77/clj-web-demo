@@ -6,7 +6,9 @@
                  [compojure "1.6.1"]
                  [ring/ring-defaults "0.3.2"]
                  [org.clojure/java.jdbc "0.7.8"]
-                 [org.postgresql/postgresql "42.2.5.jre7"]]
+                 [org.postgresql/postgresql "42.2.5.jre7"]
+                 [org.clojure/tools.namespace "0.2.11"]
+                 [hiccup "1.0.5"]]
   :plugins [[lein-ring "0.12.4"]]
   :ring {:handler web-demo.handler/app}
   :profiles

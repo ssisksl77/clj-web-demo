@@ -1,0 +1,22 @@
+FROM clojure:openjdk-8-lein-alpine
+LABEL maintainer="YounghwanNam <ssisksl77@gmail.com>"
+
+#한번만 디플로이할 때 쓰는거
+#RUN mkdir -p /usr/app/clojure-demo
+#WORKDIR /usr/app/clojure-demo
+#ADD deploy /usr/app/clojure-demo
+# WORKDIR /tmp
+#WORKDIR /usr/app/clojure-demo
+#CMD ["java", "-jar", "web-demo.jar"]
+
+# 계속 jar를 내 로컬에서 바꿀 때는 이걸 사용해야 할 듯.
+CMD ["java", "-jar", "/mnt/web-demo.jar"]
+
+#EXPOSE 80
+#EXPOSE 443
+EXPOSE 3000 5432
+# docker build -t alpine-clj-lein .
+# docker run -p 8000:3000 --name web -v /d/clojure/docker/deploy/:/mnt --link clojure-postgres-0.0.2:db -e DATABASE_HOST=db alpine-clj-lein
+# docker run -p 8000:3000 --name web -v /d/clojure/docker/deploy/:/mnt --link clojure-postgres-0.0.2 -e DATABASE_HOST=192.168.65.1 alpine-clj-lein
+
+# D:\clojure\docker>docker run --name clojure-postgres-0.0.1 -e POSTGRES_USER=yhnam -e POSTGRES_PASSWORD=1234 -d -p 5432:5432 -v /d/clojure/db-volume:/var/lib/postgresql/data postgres:11.1-alpine
