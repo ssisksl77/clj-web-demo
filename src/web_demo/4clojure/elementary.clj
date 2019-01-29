@@ -21,3 +21,21 @@
       count
       dec
       (nth %))
+
+
+; http://www.4clojure.com/problem/20
+; (= (__ (list 1 2 3 4 5)) 4)
+; (= (__ ["a" "b" "c"]) "b")
+; (= (__ [[1 2] [3 4]]) [1 2])
+#(->> %
+    count
+    (+ -2)
+    (nth %))
+
+;;  http://www.4clojure.com/problem/21 fail .
+(fn [_list idx]
+    (loop [l _list
+           i 0]
+      (if (= i idx)
+        (first l)
+        (recur (rest _list) (inc i) ))))
