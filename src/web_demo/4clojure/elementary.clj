@@ -108,3 +108,34 @@ http://www.4clojure.com/problem/21
       (recur (dec x) (conj s (+ (last s) (last (butlast s))))))))
 
 ; http://www.4clojure.com/problem/28
+; restrictions : flatten
+
+(fn my-flatten [x]
+  (if (coll? x)
+    (mapcat my-flatten x)
+    [x]))
+;; learn deeper
+;; https://mwfogleman.github.io/posts/20-12-2014-flatcat.html
+(defn tree-seq
+  [branch? children root]
+  (let [walk (fn walk [node]
+              (lazy-seq
+                (cons node
+                      (when (branch? node)
+                        (mapcat walk (children node))))))]
+    (walk root)))
+(def result (tree-seq sequential? seq simplest-possible-case))
+;; now we have all of the branches (including the input value), and all of the leaves.
+;; we need just leaves, (all atoms.)
+(filter atom? result)
+
+;; mapcat
+(concat [3 2 1 0] [6 5 4])
+(apply concat [[3 2 1 0] [6 5 4]])
+(mapcat [[3 2 1 0] [6 5 4]])
+
+;; flatten source code
+(defn flatten
+  [x]
+  (filter (complement sequential?)
+          (rest (tree-seq sequential? seq x))))
