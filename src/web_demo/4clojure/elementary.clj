@@ -137,5 +137,21 @@ http://www.4clojure.com/problem/21
 ;; flatten source code
 (defn flatten
   [x]
-  (filter (complement sequential?)
-          (rest (tree-seq sequential? seq x))))
+  (filter (complement sequential?) ;; 리프아닌것들 전부삭제
+          (rest (tree-seq sequential? seq x))))  ;; rest: 첫번째 값은 전체 리스트임.
+
+; http://www.4clojure.com/problem/29
+#(reduce str (re-seq #"[A-Z]" %))
+;http://www.4clojure.com/problem/solutions/29
+#(->> %
+  (re-seq #"[A-Z]")
+  clojure.string/join);;이번에 푼거, res-seq는 모든 서브스트링을 리턴함.
+;_artem_uv's solution:
+#(apply str
+  (filter (set (map char (range 65 91))) %))
+;; *important!
+;; set 자체가 함수가 될 수 있음 을 이용함
+(range 65 91) ; (65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90)
+(map char (range 65 91)) ; (\A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z)
+(set (map char (range 65 91))) ; #{\A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z}
+;; 이제 A-Z 자체가 필터링 되는 집합이 된거임.
