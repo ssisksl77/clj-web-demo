@@ -178,3 +178,18 @@ mapcat #(list % %)
 #(apply concat (map (fn [x] (list x x)) %))
 ; http://www.4clojure.com/problem/solutions/32
 #(sort (into % %)) ; 뭐지 이 천재는?
+
+
+;http://www.4clojure.com/problem/33
+; 헐 내가 이런 괴랄한 코드를 짜다니.
+(fn [col number]
+  (for [x col _ (range number)]
+  x))
+;http://www.4clojure.com/problem/solutions/33
+(fn f
+  ([s t]
+   (f s t '()))
+  ([s t r]
+   (if (empty? s)
+     (reverse r)
+     (recur (rest s) t (into r (repeat t (first s)))))))
