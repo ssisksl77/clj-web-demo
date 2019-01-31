@@ -164,3 +164,17 @@ http://www.4clojure.com/problem/21
 #(reduce (fn [acc x] (if (= (last acc) x) acc (conj acc x))) [] %)
 #(map first (partition-by identity %))
 ;http://www.4clojure.com/problem/solutions/30
+
+;http://www.4clojure.com/problem/31
+;Pack a Sequence
+#(partition-by identity %)
+;http://www.4clojure.com/problem/solutions/31
+(fn [coll] (partition-by identity coll))
+;; 기존 푼 방식
+mapcat #(list % %)
+
+;http://www.4clojure.com/problem/32
+;Duplicate a Sequence
+#(apply concat (map (fn [x] (list x x)) %))
+; http://www.4clojure.com/problem/solutions/32
+#(sort (into % %)) ; 뭐지 이 천재는?
