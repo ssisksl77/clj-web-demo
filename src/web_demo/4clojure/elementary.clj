@@ -228,6 +228,28 @@ mapcat #(list % %)
 (= (fnc [1 2 3 4] [5]) [1 5])
 (= (fnc [30 20] [25 15]) [30 25 20 15])
 
+;; mapcat source code
+(defn my-mapcat
+  ([f] (comp (map f) cat)) ;; collection 이 없다면 reducer를 이용한다.
+  ([f & colls]  ;; 우린 이녀석만 본다.
+   (apply concat (apply map f colls))))
+;; 여러 매개변수를 하나의 리스트에 넣는다.(colls)
+;; 이 리스트 안으로 들어가 map f를 실행해야 한다. (map f [coll_1 coll_2 ...])
+;; 이렇게 하기 위해 apply를 넣는다.
+(apply map #(list %1 %2) [[1 2 3] [:a :b :c]])
+(macroexpand '(apply map #(list %1 %2) [[1 2 3] [:a :b :c]]))
+;; ([1 :a 2 :b 3 :c])
+;; 그리고 그 값들을 한대 합친다. (concat [...] [...] [...])
+;; concat을 이 리스트 안에 넣어야 한다. apply를 사용한다.
+(apply concat (apply map #(list %1 %2) [[1 2 3] [:a :b :c]]))
+;; 결국 마지막에 푼 것
+(fn [& cols] (apply concat (apply map #(list %1 %2) cols)))
 
+;; 결국 mapcat만으로 풀 수 있는 것이었다.
+((fn [x y]
+  (mapcat #(list %1 %2) x y)) [1 2 3] [:a :b :c])
 (fn [a b]
   (mapcat #(conj [] %1 %2) a b))
+;; 결론 mapcat은 list안에 들어있는 모든 리스트들을 받아서 하나하나 동시에 map함수를 실행한다.
+;; 리스트가 두개가 있으면 동시에 두개 리스트에서 각각 값을 가져와서 맵으로 실행될 함수에 넣어지는 것은
+;; map의 기본기능이다. mapcat은 이런 map 기능 이후에 concat기능이 가미된 것뿐이다.
