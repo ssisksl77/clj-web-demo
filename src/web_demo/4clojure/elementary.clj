@@ -193,3 +193,24 @@ mapcat #(list % %)
    (if (empty? s)
      (reverse r)
      (recur (rest s) t (into r (repeat t (first s)))))))
+
+;http://www.4clojure.com/problem/34
+;Special Restrictions : range
+#(loop [x %1 y %2 res []]
+  (if (= x y)
+    (seq res)
+    (recur (inc x) y (conj res x))))
+;; http://www.4clojure.com/problem/solutions/34 개천재네
+#(take (- %2 %1) (iterate inc %1))
+
+;; http://www.4clojure.com/problem/38
+;; 이번에 푼거. 좀씩 괜찮아 지는 듯?
+(fn [& args] (reduce (fn [acc x] (if (> x acc) x acc)) args))
+;;http://www.4clojure.com/problem/solutions/38
+(fn [& x] (reduce (fn [y z] (if (< y z) z y)) 0 (seq x)))
+
+;; http://www.4clojure.com/problem/39
+;; Interleave Two Seqs
+;; Special Restrictions : interleave
+(fn [a b]
+  (mapcat #(conj [] %1 %2) a b))
