@@ -206,11 +206,28 @@ mapcat #(list % %)
 ;; http://www.4clojure.com/problem/38
 ;; 이번에 푼거. 좀씩 괜찮아 지는 듯?
 (fn [& args] (reduce (fn [acc x] (if (> x acc) x acc)) args))
+;; javascript로 풀어봄
+(function foo(x, y, res = []) {
+  if (x == y) {
+    return res;
+  }
+  res.push(x);
+  return foo(x+1, y, res);
+}(-2, 2));
+
 ;;http://www.4clojure.com/problem/solutions/38
 (fn [& x] (reduce (fn [y z] (if (< y z) z y)) 0 (seq x)))
 
 ;; http://www.4clojure.com/problem/39
 ;; Interleave Two Seqs
 ;; Special Restrictions : interleave
+;; 아래처럼 풀어서 되었는데 실패한다고 한다. 이렇게 푸는건 아닌가보다.
+(def fnc #(vec (flatten (seq (zipmap %1 %2)))))
+(= (fnc [1 2 3] [:a :b :c]) '(1 :a 2 :b 3 :c))
+(= (fnc [1 2] [3 4 5 6]) '(1 3 2 4))
+(= (fnc [1 2 3 4] [5]) [1 5])
+(= (fnc [30 20] [25 15]) [30 25 20 15])
+
+
 (fn [a b]
   (mapcat #(conj [] %1 %2) a b))
