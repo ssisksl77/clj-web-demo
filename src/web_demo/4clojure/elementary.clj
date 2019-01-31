@@ -155,3 +155,12 @@ http://www.4clojure.com/problem/21
 (map char (range 65 91)) ; (\A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z)
 (set (map char (range 65 91))) ; #{\A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z}
 ;; 이제 A-Z 자체가 필터링 되는 집합이 된거임.
+
+;; 정규식 함수를 찾아보고 무엇을 사용하면 될지 확인하고 풀었다.
+;; 하지만 고수는 아래처럼 셋을 이용해서 풀었다.
+
+;http://www.4clojure.com/problem/30
+;Compress a Sequence
+#(reduce (fn [acc x] (if (= (last acc) x) acc (conj acc x))) [] %)
+#(map first (partition-by identity %))
+;http://www.4clojure.com/problem/solutions/30
