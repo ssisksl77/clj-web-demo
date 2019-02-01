@@ -286,3 +286,31 @@ mapcat #(list % %)
 ;; interleave를 이용하는게 중요한 것 같다. interleave와 interpose는 서로 연관이 깊으니까
 (fn [sep coll]
   (drop 1 (interleave (repeat sep) coll)))
+
+
+;; http://www.4clojure.com/problem/41
+;; 빡쌨다
+(fn [col n] (mapcat identity (map #(take (dec n) %) (partition-all n col))))
+;; 이건 옛날에 푼거
+(fn [coll n]
+  (flatten
+    (concat
+      (map #(drop-last %) (partition n coll))
+      (take-last (rem (count coll) n) coll))))
+;; http://www.4clojure.com/problem/solutions/41
+(fn f
+  ([s c] (f s c []))
+  ([s c r]
+   (if (empty? s)
+     (flatten r)
+     (recur (drop c s) c (conj r (take (- c 1) s))))))
+
+;; http://www.4clojure.com/problem/42
+;; 이렇게 품
+#(reduce * (take % (iterate inc 1)))
+;; 전엔 이렇게 푼듯.
+#(reduce * (range 1 (inc %)))
+;;http://www.4clojure.com/problem/solutions/42
+(fn [x] (reduce #(* %1 %2) (map inc (range x))))
+
+;; http://www.4clojure.com/problem/43
