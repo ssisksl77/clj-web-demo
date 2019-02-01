@@ -253,3 +253,36 @@ mapcat #(list % %)
 ;; 결론 mapcat은 list안에 들어있는 모든 리스트들을 받아서 하나하나 동시에 map함수를 실행한다.
 ;; 리스트가 두개가 있으면 동시에 두개 리스트에서 각각 값을 가져와서 맵으로 실행될 함수에 넣어지는 것은
 ;; map의 기본기능이다. mapcat은 이런 map 기능 이후에 concat기능이 가미된 것뿐이다.
+
+
+;; http://www.4clojure.com/problem/40
+;; Special Restrictions : interpose
+;; 개간신히 풀음 완전 꾸역꾸역 밀어넣음...
+(fn [sep col]
+  (if (complement (coll? sep))
+    (let [sep (vector sep)]
+      (drop 1 (flatten (map (fn [a b] (list a b)) (cycle sep) col))))))
+;; 근데 시원찮음
+;; interpose의 구현을 보자.
+(def my-interpose
+  ([sep]
+   (fn [rf]
+     (let [started (volatile! false)]
+       (fn
+         ([] (rf))
+         ([result] (rf result))
+         ([result input]
+          (if @started
+            (let [sepr (rf result sep)]
+              (if (reduced? sepr)
+                sepr
+                (rf sepr input)))
+            (do
+              (vreset! started true)
+              (rf result input)))))))))
+;; http://www.4clojure.com/problem/solutions/40
+#(rest (interleave (repeat (count %2) %1) %2))
+;; 이전에는 내가 이렇게 풀었었나보다.
+;; interleave를 이용하는게 중요한 것 같다. interleave와 interpose는 서로 연관이 깊으니까
+(fn [sep coll]
+  (drop 1 (interleave (repeat sep) coll)))
