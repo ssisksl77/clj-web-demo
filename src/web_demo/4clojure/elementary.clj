@@ -314,3 +314,5 @@ mapcat #(list % %)
 (fn [x] (reduce #(* %1 %2) (map inc (range x))))
 
 ;; http://www.4clojure.com/problem/43
+;; 첫번째 시도 틀림
+#(partition (/ (count %1) %2) %1)
