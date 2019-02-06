@@ -314,5 +314,46 @@ mapcat #(list % %)
 (fn [x] (reduce #(* %1 %2) (map inc (range x))))
 
 ;; http://www.4clojure.com/problem/43
+;; drop every nth item
 ;; 첫번째 시도 틀림
 #(partition (/ (count %1) %2) %1)
+
+((fn [col n]
+   (partition (/ (count col) n) col))
+ [1 2 3 4 5 6 7 8] 2)
+
+((fn [col n]
+   (partition n col))
+ [1 2 3 4 5 6 7 8] 2) ;; ((1 2) (3 4) (5 6) (7 8))
+
+
+((fn [col n]
+   (map identity (partition n col)))
+ [1 2 3 4 5 6 7 8] 2)  ;; ((1 2) (3 4) (5 6) (7 8))
+
+((fn [col n]
+   (apply map identity (partition n col)))
+ [1 2 3 4 5 6 7 8] 2) ;; worn number of args (4) passed to : identity
+
+((fn [col n]
+   (apply map str (partition n col)))
+ [1 2 3 4 5 6 7 8] 2) ;; ("1357" "2468")
+;; map은 여러개의 리스트가 매개변수로 들어오면 하나씩 순회하는 것이 아니라.
+;; 동시에 순회한다.
+
+((fn [col n]
+   (apply map list (partition n col)))
+ [1 2 3 4 5 6 7 8] 2)
+
+;; 얼떨결에 풀어버렸다.
+;; 파티션으로 나눌 값들을 하나하나 리스트로 만들어버리는 것인데
+;; 맵으로 이걸 동시에 순회할 수 있는 것을 알고 이렇게 품.
+(fn [col n]
+  (apply map list (partition n col)))
+;; 이건 reverser interleave의 작동 방식을 위해 반대로 풀어본것.
+(mapcat (fn [a b] (list a b)) '(1 3 5) '(2 4 6))
+
+;;http://www.4clojure.com/problem/solutions/43
+;; 솔루션이 내 처음에 생각해낸거랑 비슷하다. 나는 이렇게 결국은 풀지 못했지만...
+(fn [s c]
+  (partition (/ (count s) c) (apply interleave (partition c s))))
