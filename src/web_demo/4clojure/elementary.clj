@@ -357,3 +357,40 @@ mapcat #(list % %)
 ;; 솔루션이 내 처음에 생각해낸거랑 비슷하다. 나는 이렇게 결국은 풀지 못했지만...
 (fn [s c]
   (partition (/ (count s) c) (apply interleave (partition c s))))
+
+
+;; http://www.4clojure.com/problem/44
+(fn [n col]
+  (let [n (mod n (count col))
+        [a b] (split-at n col)]
+  (concat b a)))
+;; http://www.4clojure.com/problem/solutions/44
+#(let [x (rem (+ (count %2) (rem %1 (count %2))) (count %2))]
+   (flatten [(drop x %2) (take x %2)]))
+;; 뭔가 로직이 비슷한데 안 이쁘다.
+
+
+;http://www.4clojure.com/problem/45
+'(1 4 7 10 13)
+
+;http://www.4clojure.com/problem/46
+(fn [x] (fn [& a] (apply x (reverse a))))
+
+;http://www.4clojure.com/problem/solutions/46
+#(fn [x y] (% y x))
+;; 저절로 커링되는 것인가 했는데 아니었다.
+;; # 익명함수 하나 fn 익명함수 -- 결국 나와 같은 것이었음.
+
+;http://www.4clojure.com/problem/49
+(fn [n col]
+      [(take n col) (drop n col)])
+;http://www.4clojure.com/problem/solutions/49
+#(into (into [] (vector (take %1 %2))) (vector (drop %1 %2)))
+
+;http://www.4clojure.com/problem/50
+#(partition-by type %) ; 틀림...
+#(vals (group-by type %)); 굳!
+;http://www.4clojure.com/problem/solutions/50
+#(map last (group-by type %))
+
+; http://www.4clojure.com/problem/53
