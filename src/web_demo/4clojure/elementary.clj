@@ -392,5 +392,3 @@ mapcat #(list % %)
 #(vals (group-by type %)); 굳!
 ;http://www.4clojure.com/problem/solutions/50
 #(map last (group-by type %))
-
-; http://www.4clojure.com/problem/53
