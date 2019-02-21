@@ -18,7 +18,7 @@
 
 
 
-
+;; 결국 이걸로 풀었다...
 #_((fn [col]
   (let [fst (first col)
         col (rest col)
@@ -42,6 +42,53 @@
           v2 (:cur-v res)
           ]
   (if (>= (count v1) (count v2))
-    v1
+    (if (= 1 (count v1))
+      []
+      v1)
     v2)))
 [5 6 1 3 2 7])
+
+;; http://www.4clojure.com/problem/solutions/53
+;; https://stackoverflow.com/questions/23586710/what-is-fn-and-how-does-it-differ-from-fn
+;; 머지... 이거...
+(fn*
+ [p1__2876#]
+ (sort
+  (set
+   (flatten
+    (map
+     (fn [[a1 a2 a3]] (vector a2 a3))
+     (apply
+      max-key
+      count
+      (conj (reverse
+      (filter
+       ffirst
+      (partition-by
+       first
+       (map
+        (fn [[a1 a2]] (if (< a1 a2) (vector true a1 a2) (vector false a1 a2)))
+        (partition
+         2
+         (interleave
+          p1__2876#
+          (conj (vec (rest p1__2876#)) (last p1__2876#)))))))) '())))))))
+
+;; https://github.com/jethrokuan/4clojure-solutions/blob/master/53.clj
+;; 맞아 이렇게 partition-by를 써야 했는데.
+(fn [coll]
+  (let [a (partition-by #(apply < %) (partition 2 1 coll))
+        b (filter (fn [[[x1 x2]]] (< x1 x2)) a)
+        c (first (sort-by count > b))]
+    (concat (first c) (map last (rest c)))))
+
+(def x  [1 0 2 3 4 5 1 2 4])
+;; 모든 값을 둘로 쪼갰다. 대신 한칸씩 전진해서 2씩 나눈 것
+;; 모두 이전 값을 가질 수 있게 되었다.
+(def y (partition-by #(apply < %) (partition 2 1 x)))  ;; (((1 0)) ((0 2) (2 3) (3 4) (4 5)) ((5 1)) ((1 2) (2 4)))
+;;이전 값보다 큰 것들만 가져온다.
+(def z (filter (fn [[[x1 x2]]] (< x1 x2)) y))  ;; (((0 2) (2 3) (3 4) (4 5)) ((1 2) (2 4)))
+;; 거기서 살아남은 것들중에 긴 순서대로 정렬한다.
+(def a (first (sort-by count > z))) ;; ((0 2) (2 3) (3 4) (4 5))
+;; 그 값의 첫번째값과 나머지값을 추출해서 빼낸다.
+(concat (first a) (map last (rest a)))  ;; (0 2 3 4 5)  <- (concat '(0 2) '(3 4 5))
