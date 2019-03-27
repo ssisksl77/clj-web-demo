@@ -93,3 +93,20 @@
 (def a (first (sort-by count > z))) ;; ((0 2) (2 3) (3 4) (4 5))
 ;; 그 값의 첫번째값과 나머지값을 추출해서 빼낸다.
 (concat (first a) (map last (rest a)))  ;; (0 2 3 4 5)  <- (concat '(0 2) '(3 4 5))
+
+;; http://www.4clojure.com/problem/54
+;; Partition a Sequence
+(fn [n coll]
+  (loop [c coll res []]
+    (if (or (empty? c) (< (count c) n))
+    res
+    (recur (drop n c) (conj res (take n c))))))
+;; lazy-seq써보려 했는데 안됨...
+;;http://www.4clojure.com/problem/solutions/54
+(fn f
+  ([c s] (f c s '()))
+  ([c s r] (if (empty? s) (reverse r)
+             (recur c (drop c s) (if (= (count (take c s)) c) (conj r (take c s)) r)))))
+
+
+;; http://www.4clojure.com/problem/55
