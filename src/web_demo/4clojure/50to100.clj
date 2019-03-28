@@ -110,3 +110,14 @@
 
 
 ;; http://www.4clojure.com/problem/55
+(defn solve-55 [coll]
+  (reduce (fn [acc i] (assoc acc i (inc (get acc i 0)))) {} coll))
+(solve-55 [1 1 2 3 2 1 1])
+;; http://www.4clojure.com/problem/solutions/55
+;; solution 이해가 안되는데?
+#(let [x (group-by identity (sort %))] 
+  (apply hash-map 
+    (interleave (keys x) (map count (vals x)))))
+
+  
+
