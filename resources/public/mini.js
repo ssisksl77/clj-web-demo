@@ -1,3 +1,6 @@
+/*
+제이쿼리 구조를 설명하기 위해 만든 간단한 함수
+*/
 (function (global) {
   var mini = function(name) {
     return new mini.fn.init(name);
