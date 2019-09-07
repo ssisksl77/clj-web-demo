@@ -1,0 +1,30 @@
+<div class="box" style="position: relative; background: red; width: 50px; "></div>
+<script src="./underscore_sumaary.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+var method = function(method) {  // method는 첫번재 아규먼트가 들어가는 것이다.
+    var args = _.rest(arguments);  // 첫번째 아규먼트는 method로 빼낸 것이니 없앤다. method는 obj 객체에 있는 함수(메소드)를 실행할 때 쓸 함수이다.
+    return function(obj) {
+        return obj[method].apply(obj, args.concat(_.rest(arguments)));
+    }
+}
+var bg = method('css', 'background-color');
+var $box = $('.box');
+
+console.log(bg($box)); // red 
+bg($box,'yellow'); 
+bg($box, 'purple');
+
+console.log(bg($box));
+
+var fillBlack = method('css', 'background-color', 'black');
+
+fillBlack($box);
+console.log(bg($box));
+
+// 애니메이션 작업하기.
+var moveRight = method('animate', {left: '+=200'});
+var moveDown = method('animate', {right: '+=200'});
+moveDown(moveRight($box));
+</script>

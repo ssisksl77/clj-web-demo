@@ -1,4 +1,8 @@
 var _ = {};
+var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+function getLength(list) {
+    return list == null ? void 0 : list.length; // void 0 == undefined
+}
 var isArrayLike = function (list) {
     var len = getLength(list);
     return typeof len == 'number' && len >= 0 && len <= MAX_ARRAY_INDEX;
@@ -31,9 +35,9 @@ _.isObject = function (obj) {
 _.keys = function (obj) {
     return _.isObject(obj) ? Object.keys(obj) : [];
 };
-_.constant = function (v) {
-    return function () { return v; }
-}
+_.constant = function(v) {
+    return function() { return v; }
+};
 
 // 이게 핵심
 function bloop(new_data, body, stopper, is_reduce) {
@@ -91,3 +95,10 @@ _.findKey = bloop(_.noop, _.rester(_.idtt, 3), _.idtt);
 _.some = bloop(_.constant(false), _.constant(true), _.idtt);
 _.every = bloop(_.constant(true), _.constant(false), _.not);
 _.reduce = bloop(_.noop, _.noop, undefined, true);
+
+_.toArray = function (list) {
+    return Array.isArray(list) ? list : _.values(list);
+};
+_.rest = function (list, num) {
+    return _.toArray(list).slice(num || 1);
+};

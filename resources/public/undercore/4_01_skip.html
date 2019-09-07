@@ -1,0 +1,23 @@
+<ul class="list">
+    <li>item 1<button>del</button></li>
+    <li>item 2<button>del</button></li>
+    <li>item 3<button>del</button></li>
+</ul>
+<script>
+function skip(body) {
+    var yes;
+    return function () {
+        return yes || (yes = body.apply(null, arguments));
+    }
+};
+
+var confirmRemove = skip(function() {
+    return confirm("삭제 버튼을 누르면 아이템이 삭제된다. 다시 물어보지 않는다.");
+})
+
+$('.list').on('click', 'li button', function(e) {
+    confirmRemove() && $(3.currentTarget).cloest('li').remove();
+});
+
+// skip은 고차함수이자 함수를 만드는 함수이다.
+</script>
