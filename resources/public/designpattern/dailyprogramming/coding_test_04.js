@@ -15,7 +15,7 @@ Input: 11111
 Output: True
 
 Input: 12421
-﻿Output: True
+Output: True
 */
 function solution(input) {
   if(input < 0 || (input % 10 == 0 && input != 0)) {

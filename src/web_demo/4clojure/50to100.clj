@@ -115,9 +115,27 @@
 (solve-55 [1 1 2 3 2 1 1])
 ;; http://www.4clojure.com/problem/solutions/55
 ;; solution 이해가 안되는데?
-#(let [x (group-by identity (sort %))] 
-  (apply hash-map 
+#(let [x (group-by identity (sort %))]
+  (apply hash-map
     (interleave (keys x) (map count (vals x)))))
 
-  
-
+;; http://www.4clojure.com/problem/56#prob-title
+;; Find Distinct Items
+;; Topic: seqs core-functions
+;; 리듀스로 풀어버림.
+#(:res (reduce
+    (fn [acc i] (if ((:hash acc) i)
+                    acc
+                    (do
+                        (assoc acc :res (concat (:res acc) [i])
+                                   :hash (assoc (:hash acc) i true))
+                    ))) {:res [], :hash {}} %))
+;; solution (재귀로 작업한 듯 하다.)
+(fn f
+   ([s] (f s []))
+   ([s r]
+    (if (empty? s)
+      r
+      (if (contains? (apply hash-map (interleave  r (repeat (count r) 0))) (first s))
+        (recur (rest s) r)
+        (recur (rest s) (into r ((comp vector first) s)))))))
