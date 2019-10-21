@@ -139,3 +139,8 @@
       (if (contains? (apply hash-map (interleave  r (repeat (count r) 0))) (first s))
         (recur (rest s) r)
         (recur (rest s) (into r ((comp vector first) s)))))))
+
+
+;; http://www.4clojure.com/problem/58#prob-title
+;; Topics: higher-order-functions core-function
+;; restriction comp
